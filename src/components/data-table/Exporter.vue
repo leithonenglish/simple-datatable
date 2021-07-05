@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import Checkbox from '../Checkbox.vue';
 import RadioButton from '../RadioButton.vue';
 
@@ -39,11 +39,11 @@ export default defineComponent({
   },
   props: {
     columns: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     },
     data: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true
     }
   },

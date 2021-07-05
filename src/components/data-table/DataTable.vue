@@ -35,7 +35,7 @@
               <div class="holder">
                 <span>{{ header }}</span>
                 <div class="actions">
-                  <div v-if="sortable" :class="['sort', isSorting(field) ? currentSort.order : '']">
+                  <div v-if="sortable" :class="['sort', isSorting(field) ? currentSort?.order : '']">
                     <transition
                       enter-active-class="fadeInUp"
                       leave-active-class="fadeOutUp"
@@ -128,8 +128,8 @@ import ExpandedIcon from "../../assets/left-round-angle-arrow.svg";
 type ColumnProps = {
   header: string;
   field: string;
-  sortable: boolean | string;
-  wrap: boolean | string;
+  sortable: boolean;
+  wrap: boolean;
   width: string | undefined
   children: any
 };
@@ -204,7 +204,7 @@ export default defineComponent({
     const dataForExport = computed(() => selectedItems.value.length > 0 ? selectedItems.value : value);
     const columns = computed<Array<ColumnProps>>(() =>
       children.value
-        .filter(({ type }) => type && type.name === "Column")
+        .filter(({ type }) => type && (type as any).name === "Column")
         .map((child) => {
           const { field, header, sortable, wrap, width } =
             child.props as ColumnProps;
@@ -212,7 +212,7 @@ export default defineComponent({
             field,
             header,
             wrap: wrap || typeof wrap === "undefined",
-            sortable: sortable || sortable == "",
+            sortable: !!sortable,
             width,
             children: child.children
           };
@@ -232,7 +232,7 @@ export default defineComponent({
     });
 
     // generate data for table based on sorts or page
-    const rowData = computed(() => {
+    const rowData = computed<any[]>(() => {
       let data = [...value];
       if (hasGlobalSearch.value && globalSearchText.value) {
         data = data.filter((row: any) => {
